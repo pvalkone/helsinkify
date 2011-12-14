@@ -31,12 +31,16 @@ function getSpotifyLinkFor(track) {
   return href !== undefined ? '<a href="' + href + '">' + track + '</a>' : href
 }
 
-$('p.lista-p').each(function(index) {
-  var text = $.trim($(this).text())
-  $.each(text.split('\n'), function() {
-    var track = this.substring(this.lastIndexOf('» ') + 2)
-    var spotifyLink = getSpotifyLinkFor(track)
-    text = text.split(track).join((spotifyLink !== undefined ? spotifyLink : track) + '<br />')
+function helsinkify() {
+  $('p.lista-p').each(function(index) {
+    var text = $.trim($(this).text())
+    $.each(text.split('\n'), function() {
+      var track = this.substring(this.lastIndexOf('» ') + 2)
+      var spotifyLink = getSpotifyLinkFor(track)
+      text = text.split(track).join((spotifyLink !== undefined ? spotifyLink : track) + '<br />')
+    })
+    $(this).html(text)
   })
-  $(this).html(text)
-})
+}
+
+helsinkify()
