@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name        Helsinkify
 // @namespace   https://github/pvalkone
-// @include     *
+// @match       http://www.radiohelsinki.fi/soittolistat/
 // @author      Petteri Valkonen
-// @description An UserScript for adding Spotify links to Radio Helsinki's playlist pages (http://www.radiohelsinki.fi/soittolistat/).
+// @description An UserScript for adding Spotify links to Radio Helsinki's playlist pages.
 // @version     0.1  
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js
 // ==/UserScript==
