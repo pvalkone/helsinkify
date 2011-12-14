@@ -6,7 +6,12 @@
 // @description An UserScript for adding Spotify links to Radio Helsinki's playlist pages.
 // @version     0.1  
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js
+// @require     http://github.com/cowboy/jquery-throttle-debounce/raw/v1.1/jquery.ba-throttle-debounce.min.js
 // ==/UserScript==
+
+// Limit Spotify metadata queries to 10 requests / second
+// See: http://developer.spotify.com/en/metadata-api/overview/#rate-limiting
+var metadataQueryDelay = 1000 / 10
 
 function getMostPopularTrackHref(tracks) {
   var href
@@ -26,14 +31,14 @@ function getMostPopularTrackHref(tracks) {
 function getSpotifyLinkFor(track) {
   var href
   var query = track.replace(':', '').toLowerCase()
-  $.ajax({
+  $.throttle(metadataQueryDelay, $.ajax({
     url: 'http://ws.spotify.com/search/1/track.json?q=' + escape(query),
     async: false,
     success: function(data) {
       var result = $.parseJSON(data)
       href = getMostPopularTrackHref(result.tracks)
     }
-  })
+  }))
   return href !== undefined ? '<a href="' + href + '">' + track + '</a>' : href
 }
 
