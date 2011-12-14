@@ -23,15 +23,10 @@ function getMostPopularTrackHref(tracks) {
 }
 
 function getSpotifyLinkFor(track) {
-  var href
-  var query = track.replace(':', '').toLowerCase()
   $.throttle(metadataQueryDelay, $.ajax({
-    url: 'http://ws.spotify.com/search/1/track.json?q=' + escape(query),
+    url: 'http://ws.spotify.com/search/1/track.json?q=' + escape(track.replace(':', '').toLowerCase()),
     async: false,
-    success: function(data) {
-      var result = $.parseJSON(data)
-      href = getMostPopularTrackHref(result.tracks)
-    }
+    success: function(data) { href = getMostPopularTrackHref($.parseJSON(data).tracks) }
   }))
   return href !== undefined ? '<a href="' + href + '">' + track + '</a>' : href
 }
