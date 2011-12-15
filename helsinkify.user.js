@@ -44,7 +44,7 @@ function getSpotifyLinkFor(track) {
 }
 
 function helsinkify() {
-  $('p.lista-p').each(function(index) {
+  $('p.lista-p').each(function() {
     var text = $.trim($(this).text())
     $.each(text.split('\n'), function() {
       var track = this.substring(this.lastIndexOf('» ') + 2)
