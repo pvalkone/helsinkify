@@ -7,6 +7,7 @@
 // @version     0.1  
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js
 // @require     http://github.com/cowboy/jquery-throttle-debounce/raw/v1.1/jquery.ba-throttle-debounce.min.js
+// @require     https://raw.github.com/brandonaaron/jquery-outerhtml/master/jquery.outerhtml.js
 // ==/UserScript==
 
 // Limit Spotify metadata queries to 10 requests / second
@@ -28,7 +29,7 @@ function getSpotifyLinkFor(track) {
     async: false,
     success: function(data) { href = getMostPopularTrackHref($.parseJSON(data).tracks) }
   }))
-  return href !== undefined ? '<a href="' + href + '">' + track + '</a>' : href
+  return href !== undefined ? $('<a>').attr('href', href).text(track).outerHTML() : href
 }
 
 function helsinkify() {
@@ -37,7 +38,7 @@ function helsinkify() {
     $.each(text.split('\n'), function() {
       var track = this.substring(this.lastIndexOf('» ') + 2)
       var spotifyLink = getSpotifyLinkFor(track)
-      text = text.split(track).join((spotifyLink !== undefined ? spotifyLink : track) + '<br />')
+      text = text.split(track).join((spotifyLink !== undefined ? spotifyLink : track) + $('br').outerHTML())
     })
     $(this).html(text)
   })
