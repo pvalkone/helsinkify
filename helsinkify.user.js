@@ -29,7 +29,7 @@ function getSpotifyLinkFor(track) {
     async: false,
     success: function(data) { href = getMostPopularTrackHref($.parseJSON(data).tracks) }
   }))
-  return href !== undefined ? $('<a>').attr('href', href).text(track).outerHTML() : href
+  return href ? $('<a>').attr('href', href).text(track).outerHTML() : href
 }
 
 function helsinkify() {
@@ -38,7 +38,7 @@ function helsinkify() {
     $.each(text.split('\n'), function() {
       var track = this.substring(this.lastIndexOf('» ') + 2)
       var spotifyLink = getSpotifyLinkFor(track)
-      text = text.split(track).join((spotifyLink !== undefined ? spotifyLink : track) + $('br').outerHTML())
+      text = text.split(track).join((spotifyLink ? spotifyLink : track) + $('br').outerHTML())
     })
     $(this).html(text)
   })
