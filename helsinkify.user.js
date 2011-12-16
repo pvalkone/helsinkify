@@ -17,7 +17,6 @@
 // @description An user script for adding Spotify links to Radio Helsinki's playlist pages.
 // @version     0.1  
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js
-// @require     http://github.com/cowboy/jquery-throttle-debounce/raw/v1.1/jquery.ba-throttle-debounce.min.js
 // @require     https://raw.github.com/brandonaaron/jquery-outerhtml/master/jquery.outerhtml.js
 // ==/UserScript==
 
@@ -34,27 +33,36 @@ function getMostPopularTrackHref(tracks) {
   return mostPopularTrack.href
 }
 
-function getSpotifyLinkFor(track) {
-  var href
-  var split = track.split(': ')
-  var query = ('artist:"' + split[0] + '" track:"' + split[1] + '"').toLowerCase()
-  $.throttle(metadataQueryDelay, $.ajax({
-    url: 'http://ws.spotify.com/search/1/track.json?q=' + escape(query),
-    async: false,
-    success: function(data) { href = getMostPopularTrackHref($.parseJSON(data).tracks) }
-  }))
-  return href ? $('<a>').attr('href', href).text(track).outerHTML() : href
-}
-
 function helsinkify() {
   $('p.lista-p').each(function() {
-    var text = $.trim($(this).text())
+    var ajaxRequestQueue = []
+    var list = $(this)
+    var text = $.trim(list.text())
+    list.empty()
+    setInterval(function() {
+      if (ajaxRequestQueue.length > 0) {
+        var ajaxRequest = ajaxRequestQueue.pop()
+        if (typeof ajaxRequest === "function") {
+          var spotifyLink = ajaxRequest()
+          var track = spotifyLink.href ? $('<a>').attr('href', spotifyLink.href).text(spotifyLink.track).outerHTML() : spotifyLink.track
+          list.prepend(track + $('<br>').outerHTML())
+        }
+      }
+    }, metadataQueryDelay)
     $.each(text.split('\n'), function() {
       var track = this.substring(this.lastIndexOf('» ') + 2)
-      var spotifyLink = getSpotifyLinkFor(track)
-      text = text.split(track).join((spotifyLink ? spotifyLink : track) + $('br').outerHTML())
+      var split = track.split(': ')
+      var query = ('artist:"' + split[0] + '" track:"' + split[1] + '"').toLowerCase()
+      ajaxRequestQueue.push(function() {
+        var href
+        $.ajax({
+          url: 'http://ws.spotify.com/search/1/track.json?q=' + escape(query),
+          async: false,
+          success: function(data) { href = getMostPopularTrackHref($.parseJSON(data).tracks) }
+        })
+        return { 'track': track, 'href': href }
+      })
     })
-    $(this).html(text)
   })
 }
 
