@@ -36,7 +36,7 @@ function getMostPopularTrackHref(tracks) {
 
 function getSpotifyLinkFor(track) {
   var href
-  var split = track.split(':')
+  var split = track.split(': ')
   var query = ('artist:"' + split[0] + '" track:"' + split[1] + '"').toLowerCase()
   $.throttle(metadataQueryDelay, $.ajax({
     url: 'http://ws.spotify.com/search/1/track.json?q=' + escape(query),
