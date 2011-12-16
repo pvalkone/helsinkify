@@ -52,7 +52,7 @@ function helsinkify() {
     $.each(text.split('\n'), function() {
       var track = this.substring(this.lastIndexOf('» ') + 2)
       var split = track.split(': ')
-      var query = ('artist:"' + split[0] + '" track:"' + split[1] + '"').toLowerCase()
+      var query = (split[0] + ' track:"' + split[1] + '"').toLowerCase()
       ajaxRequestQueue.push(function() {
         var href
         $.ajax({
