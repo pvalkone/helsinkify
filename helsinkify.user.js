@@ -24,9 +24,7 @@
 var metadataQueryDelay = 1000
 
 function getMostPopularTrackHref(tracks) {
-  if (tracks.length == 0) {
-    return
-  }
+  if (tracks.length == 0) { return }
   var maxPopularity = Math.max.apply(Math, $.map(tracks, function(track) { return track.popularity })) 
   var mostPopularTrack = $.grep(tracks, function(track) { return parseFloat(track.popularity) == maxPopularity })[0]
   return mostPopularTrack.href
