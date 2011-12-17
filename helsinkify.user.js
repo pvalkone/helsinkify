@@ -44,7 +44,7 @@ function helsinkify() {
         if (typeof ajaxRequest === "function") {
           var spotifyLink = ajaxRequest()
           var track = spotifyLink.href ? $('<a>').attr('href', spotifyLink.href).text(spotifyLink.track).outerHTML() : spotifyLink.track
-          list.prepend(track + $('<br>').outerHTML())
+          list.prepend('» ' + track + $('<br>').outerHTML())
         }
       }
     }, metadataQueryDelay)
