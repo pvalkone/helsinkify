@@ -15,7 +15,7 @@
 // @match       http://www.radiohelsinki.fi/soittolistat/
 // @author      Petteri Valkonen
 // @description An user script for adding Spotify links to Radio Helsinki's playlist pages.
-// @version     0.1  
+// @version     0.1.0-pre 
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js
 // @require     https://raw.github.com/brandonaaron/jquery-outerhtml/master/jquery.outerhtml.js
 // ==/UserScript==
