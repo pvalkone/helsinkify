@@ -32,8 +32,10 @@ function getMostPopularTrackHref(tracks) {
 
 function helsinkify() {
   var ajaxRequestQueue = []
-  $('p.lista-p').each(function() {
+  var lists = []
+  $('p.lista-p').each(function(index) {
     var list = $(this)
+    lists[index] = list
     var text = $.trim(list.text())
     list.empty()
     setInterval(function() {
@@ -42,7 +44,7 @@ function helsinkify() {
         if (typeof ajaxRequest === "function") {
           var spotifyLink = ajaxRequest()
           var track = spotifyLink.href ? $('<a>').attr('href', spotifyLink.href).text(spotifyLink.track).outerHTML() : spotifyLink.track
-          list.prepend('» ' + track + $('<br>').outerHTML())
+          lists[spotifyLink.listIndex].prepend('» ' + track + $('<br>').outerHTML())
         }
       }
     }, metadataQueryDelay)
@@ -57,7 +59,7 @@ function helsinkify() {
           async: false,
           success: function(data) { href = getMostPopularTrackHref($.parseJSON(data).tracks) }
         })
-        return { 'track': track, 'href': href }
+        return { 'listIndex': index, 'track': track, 'href': href }
       })
     })
   })
