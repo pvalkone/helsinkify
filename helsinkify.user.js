@@ -20,9 +20,6 @@
 // @require     https://raw.github.com/brandonaaron/jquery-outerhtml/master/jquery.outerhtml.js
 // ==/UserScript==
 
-// Spotify metadata queries are limited to max 10 requests / second. However, based on testing,
-// a reasonable rate which doesn't trigger any 403 Forbidden responses for long playlists seems
-// to be around 1 req / sec.
 // See: http://developer.spotify.com/en/metadata-api/overview/#rate-limiting
 var metadataQueryDelay = 1000
 
@@ -36,8 +33,8 @@ function getMostPopularTrackHref(tracks) {
 }
 
 function helsinkify() {
+  var ajaxRequestQueue = []
   $('p.lista-p').each(function() {
-    var ajaxRequestQueue = []
     var list = $(this)
     var text = $.trim(list.text())
     list.empty()
