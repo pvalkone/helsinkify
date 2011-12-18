@@ -33,21 +33,21 @@ function getMostPopularTrackHref(tracks) {
 function helsinkify() {
   var ajaxRequestQueue = []
   var lists = []
+  setInterval(function() {
+    if (ajaxRequestQueue.length > 0) {
+      var ajaxRequest = ajaxRequestQueue.pop()
+      if (typeof ajaxRequest === "function") {
+        var spotifyLink = ajaxRequest()
+        var track = spotifyLink.href ? $('<a>').attr('href', spotifyLink.href).text(spotifyLink.track).outerHTML() : spotifyLink.track
+        lists[spotifyLink.listIndex].prepend('» ' + track + $('<br>').outerHTML())
+      }
+    }
+  }, metadataQueryDelay)
   $('p.lista-p').each(function(index) {
     var list = $(this)
     lists[index] = list
     var text = $.trim(list.text())
     list.empty()
-    setInterval(function() {
-      if (ajaxRequestQueue.length > 0) {
-        var ajaxRequest = ajaxRequestQueue.pop()
-        if (typeof ajaxRequest === "function") {
-          var spotifyLink = ajaxRequest()
-          var track = spotifyLink.href ? $('<a>').attr('href', spotifyLink.href).text(spotifyLink.track).outerHTML() : spotifyLink.track
-          lists[spotifyLink.listIndex].prepend('» ' + track + $('<br>').outerHTML())
-        }
-      }
-    }, metadataQueryDelay)
     $.each(text.split('\n'), function() {
       var track = this.substring(this.lastIndexOf('» ') + 2)
       var split = track.split(': ')
