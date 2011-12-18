@@ -20,8 +20,9 @@
 // @require     https://raw.github.com/brandonaaron/jquery-outerhtml/master/jquery.outerhtml.js
 // ==/UserScript==
 
+// Limit Spotify metadata queries to 10 requests / second
 // See: http://developer.spotify.com/en/metadata-api/overview/#rate-limiting
-var metadataQueryDelay = 1000
+var metadataQueryDelay = 1 * 1000 / 10
 
 function getMostPopularTrackHref(tracks) {
   if (tracks.length == 0) { return }
